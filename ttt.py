@@ -1,3 +1,21 @@
+import random
+import time
+
+def easyAI(positions, spacesLeft, playerMarker = "o"):
+    while True:
+        randNumberRow = random.randint(0,2)
+        randNumberCol = random.randint(0,2)
+        if positions[randNumberRow][randNumberCol] == " ":
+            positions[randNumberRow][randNumberCol] = playerMarker
+            return positions
+        elif spacesLeft == 0:
+            return None
+        else:
+            continue
+            
+
+
+
 def intro():
     print("The positions are shown below as p1 to p9.")
     print("When it's you're turn, pick a position and")
@@ -38,13 +56,26 @@ def checkWinner(gameBoard):
             return True
         if gameBoard[0][i] == "o" and gameBoard [1][i] == "o" and gameBoard [2][i] == "o":
             print("o wins!")
-            return True
+            return True        
         if gameBoard[i][0] == "x" and gameBoard [i][1] == "x" and gameBoard [i][2] == "x":
             print("x wins!")
             return True
         if gameBoard[0][i] == "x" and gameBoard [1][i] == "x" and gameBoard [2][i] == "x":
             print("x wins!")
             return True
+    if gameBoard[0][0] == "o" and gameBoard [1][1] == "o" and gameBoard [2][2] == "o":
+        print("o wins!")
+        return True
+    if gameBoard[0][0] == "x" and gameBoard [1][1] == "x" and gameBoard [2][2] == "x":
+        print("x wins!")
+        return True
+    if gameBoard[0][2] == "o" and gameBoard [1][1] == "o" and gameBoard [2][0] == "o":
+        print("o wins!")
+        return True
+    if gameBoard[0][2] == "x" and gameBoard [1][1] == "x" and gameBoard [2][0] == "x":
+        print("x wins!")
+        return True
+    
 
 
 def playGame():
@@ -54,21 +85,23 @@ def playGame():
         if spacesLeft == 0:
              print("Game tied.")
              break
-        try:
-            print("It is " + currentTurnLetter + "'s turn. Where would you like to go? ")
-            
-            location = int(input("Which spot?"))
-            row, col = checkRowAndColDictionary(location)
-            #row = currentCellBeingPlayed[0]
-            #col = currentCellBeingPlayed[1]
-            if (row >=0 and row <=2) and (col >=0 and col <=2) and positions[row][col] == " ":
-                positions[row][col] = currentTurnLetter
-            elif positions[row][col] != " ":
-                print("Current space is already taken. Please select another location")
+        elif currentTurnLetter == "x":
+            try:
+                print("It is " + currentTurnLetter + "'s turn. Where would you like to go? ")
+                location = int(input("Which spot?"))
+                row, col = checkRowAndColDictionary(location)
+                if (row >=0 and row <=2) and (col >=0 and col <=2) and positions[row][col] == " ":
+                    positions[row][col] = currentTurnLetter
+                elif positions[row][col] != " ":
+                    print("Current space is already taken. Please select another location")
+                    continue
+            except (ValueError,KeyError,IndexError):
+                print("Please enter a valid location")
                 continue
-        except (ValueError,KeyError,IndexError):
-            print("Please enter a valid location")
-            continue
+        elif currentTurnLetter == "o":
+            print("The computer is going.")
+            time.sleep(2)
+            easyAI(positions,spacesLeft)
             
         if currentTurnLetter == "x": currentTurnLetter = "o"
         elif currentTurnLetter == "o": currentTurnLetter = "x"
@@ -86,6 +119,15 @@ def playGame():
 def main():
     intro()
     playGame()
-
+    while True:
+        playAgain = input("Play again? y or n?")
+        if playAgain == "y":
+            main()
+        elif playAgain == "n":
+            return None
+        else:
+            print("Not a valid answer.")
+            
+        
 
     
