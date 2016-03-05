@@ -82,8 +82,22 @@ def mediumAI(positions, spacesLeft, computerMarker = "o"):
     pointValuesColumn = analyzeBestPlay(transposePositions,computerMarker,playerMarker)
     for indexCol, eachCol in enumerate(pointValuesColumn):
         pointValuesColumn[indexCol][1] = [eachCol[1][1],eachCol[1][0]]
-    pointValues = pointValuesRow + pointValuesColumn
-    #analyzeBestPlay returns playAnalysis that is a list of [playValue,emptyCell]
+    #Analyze each diagonal
+    pos00 = [0,0]
+    pos11 = [1,1]
+    pos22 = [2,2]
+    pos02 = [0,2]
+    pos20 = [2,0]
+    downAndRight = [pos00,pos11,pos22]
+    upAndRight = [pos02,pos11,pos20]
+    darPointValue = analyzeBestPlay(downAndRight,computerMarker,playerMarker)
+    uarPointValue = analyzeBestPlay(upAndRight,computerMarker,playerMarker)
+    if darPointValue[1][1] == 1: darPointValue[1][0] += 1
+    elif darPointValue[1][1] == 2: darPointValue[1][0] += 2
+    if uarPointValue[1][1] == 0: darPointValue[1][0] += 2
+    elif uarPointValue[1][1] == 1: darPointValue[1][0] += 1   
+    #analyzeBestPlay returns playAnalysis that is a list of [playValue,
+    pointValues = pointValuesRow + pointValuesColumn + darPointValue + uarPointValue
     playToMake = [-1,[-1,-1]]
     for pointValue in pointValues:
         if pointValue[0] > playToMake[0]:
