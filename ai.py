@@ -31,7 +31,9 @@ def analyzeBestPlay(positions,computerMarker,playerMarker):
                 emptyCells.append([rowIndex,cellIndex])
                 emptyCellsCount +=1
         #Creates list of analyzed rows including the number of the row, how many markers the computer and player have and where the empty spaces are.
-        rowAnalysis.append([rowIndex, computerCounter, playerCounter, emptyCells])
+        if len(emptyCells) != 0:
+            #No need to analyze a row that's empty
+            rowAnalysis.append([rowIndex, computerCounter, playerCounter, emptyCells])
     print("The rowAnalysis is")
     printRowsOfGameBoard(rowAnalysis)
     playAnalysis = []
@@ -59,60 +61,38 @@ def analyzeBestPlay(positions,computerMarker,playerMarker):
             playValue = 5
         else:
             playValue = 0
+        if len(emptyCells) == 0:
+            emptyCells == None
         if len(emptyCells) > 1:
             #If there is more emptyCells than 1, in the cases of there being a single or no marker in a row, the computer will randomly pick a move 
             randomEmptyCell = random.randint(0,len(emptyCells)-1)
-            emptyCells = emptyCells[randomEmptyCell]
-        playAnalysis.append([playValue,emptyCells])
+            emptyCells = [emptyCells[randomEmptyCell]]
+        playAnalysis.append([playValue,emptyCells[0]]) #[0] for emptyCells because all the other list elements get stripped away 
     print("The playAnalysis is")
     printRowsOfGameBoard(playAnalysis)
-    return playAnalysis
-            
+    return playAnalysis  
     
 
 def mediumAI(positions, spacesLeft, computerMarker = "o"):
     if computerMarker == "o": playerMarker = "x"
     elif computerMarker == "x": playerMarker = "o"
-    analyzeBestPlay(positions,computerMarker,playerMarker)
-    easyAI(positions,spacesLeft)
-
-
+    pointValues = analyzeBestPlay(positions,computerMarker,playerMarker)
+    #analyzeBestPlay returns playAnalysis that is a list of [playValue,emptyCell]
+    playToMake = [-1,[-1,-1]]
+    for pointValue in pointValues:
+        if pointValue[0] > playToMake[0]:
+            playToMake = pointValue
+    print(playToMake)
+    #print(playToMake)
+    print(playToMake[0])
+    playRow = playToMake[1][0]
+    print(playToMake[1][1])
+    playCol = playToMake[1][1]
+    positions[playRow][playCol] = computerMarker
+    return positions                             
 positions = [
-                    ["x","x"," "],
                     ["o","o"," "],
-                    [" ","o","x"]
+                    [" "," "," "],
+                    [" "," "," "]
                 ]
 mediumAI(positions,4)
-
-        
-            
-            
-            
-            
-
-
-
-'''
-In case I need it:
-
-    def checkWinner(gameBoard):
-    for i in [0,1,2]:
-        if ((gameBoard[i][0] == "o" and gameBoard [i][1] == "o" and gameBoard [i][2] == "o") or
-            (gameBoard[0][i] == "o" and gameBoard [1][i] == "o" and gameBoard [2][i] == "o")):
-            print("o wins!")
-            return True        
-        elif ((gameBoard[i][0] == "x" and gameBoard [i][1] == "x" and gameBoard [i][2] == "x") or
-              (gameBoard[0][i] == "x" and gameBoard [1][i] == "x" and gameBoard [2][i] == "x")):
-            print("x wins!")
-            return True
-    if ((gameBoard[0][0] == "o" and gameBoard [1][1] == "o" and gameBoard [2][2] == "o") or
-        (gameBoard[0][2] == "o" and gameBoard [1][1] == "o" and gameBoard [2][0] == "o")):
-            print("o wins!")
-            return True
-
-    if ((gameBoard[0][0] == "x" and gameBoard [1][1] == "x" and gameBoard [2][2] == "x") or
-        (gameBoard[0][2] == "x" and gameBoard [1][1] == "x" and gameBoard [2][0] == "x")):
-            print("x wins!")
-            return True
-
-'''

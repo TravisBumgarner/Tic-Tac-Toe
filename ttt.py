@@ -93,7 +93,7 @@ def playGame():
                 continue
         elif currentTurnLetter == "o":
             print("The computer is going.")
-            time.sleep(2)
+            #time.sleep(2)
             mediumAI(positions,spacesLeft)
             
         if currentTurnLetter == "x": currentTurnLetter = "o"
