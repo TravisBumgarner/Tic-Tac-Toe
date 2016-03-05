@@ -1,5 +1,6 @@
 import random
 import time
+from ai import mediumAI
 
 def easyAI(positions, spacesLeft, playerMarker = "o"):
     while True:
@@ -51,31 +52,23 @@ def checkRowAndColDictionary(location):
 
 def checkWinner(gameBoard):
     for i in [0,1,2]:
-        if gameBoard[i][0] == "o" and gameBoard [i][1] == "o" and gameBoard [i][2] == "o":
-            print("o wins!")
-            return True
-        if gameBoard[0][i] == "o" and gameBoard [1][i] == "o" and gameBoard [2][i] == "o":
+        if ((gameBoard[i][0] == "o" and gameBoard [i][1] == "o" and gameBoard [i][2] == "o") or
+            (gameBoard[0][i] == "o" and gameBoard [1][i] == "o" and gameBoard [2][i] == "o")):
             print("o wins!")
             return True        
-        if gameBoard[i][0] == "x" and gameBoard [i][1] == "x" and gameBoard [i][2] == "x":
+        elif ((gameBoard[i][0] == "x" and gameBoard [i][1] == "x" and gameBoard [i][2] == "x") or
+              (gameBoard[0][i] == "x" and gameBoard [1][i] == "x" and gameBoard [2][i] == "x")):
             print("x wins!")
             return True
-        if gameBoard[0][i] == "x" and gameBoard [1][i] == "x" and gameBoard [2][i] == "x":
+    if ((gameBoard[0][0] == "o" and gameBoard [1][1] == "o" and gameBoard [2][2] == "o") or
+        (gameBoard[0][2] == "o" and gameBoard [1][1] == "o" and gameBoard [2][0] == "o")):
+            print("o wins!")
+            return True
+
+    if ((gameBoard[0][0] == "x" and gameBoard [1][1] == "x" and gameBoard [2][2] == "x") or
+        (gameBoard[0][2] == "x" and gameBoard [1][1] == "x" and gameBoard [2][0] == "x")):
             print("x wins!")
             return True
-    if gameBoard[0][0] == "o" and gameBoard [1][1] == "o" and gameBoard [2][2] == "o":
-        print("o wins!")
-        return True
-    if gameBoard[0][0] == "x" and gameBoard [1][1] == "x" and gameBoard [2][2] == "x":
-        print("x wins!")
-        return True
-    if gameBoard[0][2] == "o" and gameBoard [1][1] == "o" and gameBoard [2][0] == "o":
-        print("o wins!")
-        return True
-    if gameBoard[0][2] == "x" and gameBoard [1][1] == "x" and gameBoard [2][0] == "x":
-        print("x wins!")
-        return True
-    
 
 
 def playGame():
@@ -101,7 +94,7 @@ def playGame():
         elif currentTurnLetter == "o":
             print("The computer is going.")
             time.sleep(2)
-            easyAI(positions,spacesLeft)
+            mediumAI(positions,spacesLeft)
             
         if currentTurnLetter == "x": currentTurnLetter = "o"
         elif currentTurnLetter == "o": currentTurnLetter = "x"
@@ -130,4 +123,4 @@ def main():
             
         
 
-    
+main()
