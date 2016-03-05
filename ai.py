@@ -10,6 +10,7 @@ def easyAI(positions, spacesLeft, computerMarker = "o"):
             return None
         else:
             continue
+        
 def printRowsOfGameBoard(gameBoard):
     for each in gameBoard:
         print(str(each))
@@ -34,8 +35,8 @@ def analyzeBestPlay(positions,computerMarker,playerMarker):
         if len(emptyCells) != 0:
             #No need to analyze a row that's empty
             rowAnalysis.append([rowIndex, computerCounter, playerCounter, emptyCells])
-    print("The rowAnalysis is")
-    printRowsOfGameBoard(rowAnalysis)
+    '''print("The rowAnalysis is")
+    printRowsOfGameBoard(rowAnalysis)'''
     playAnalysis = []
     #Play analysis will check each potential spot to move and give it a rating.
     #15 = win
@@ -68,25 +69,26 @@ def analyzeBestPlay(positions,computerMarker,playerMarker):
             randomEmptyCell = random.randint(0,len(emptyCells)-1)
             emptyCells = [emptyCells[randomEmptyCell]]
         playAnalysis.append([playValue,emptyCells[0]]) #[0] for emptyCells because all the other list elements get stripped away 
-    print("The playAnalysis is")
-    printRowsOfGameBoard(playAnalysis)
+    '''print("The playAnalysis is")
+    printRowsOfGameBoard(playAnalysis)'''
     return playAnalysis  
-    
-
 def mediumAI(positions, spacesLeft, computerMarker = "o"):
     if computerMarker == "o": playerMarker = "x"
     elif computerMarker == "x": playerMarker = "o"
-    pointValues = analyzeBestPlay(positions,computerMarker,playerMarker)
+    #Analyze each row
+    pointValuesRow = analyzeBestPlay(positions,computerMarker,playerMarker)
+    transposePositions = [list(x) for x in zip(*positions)]
+    #Analyze each column by transposing positions
+    pointValuesColumn = analyzeBestPlay(transposePositions,computerMarker,playerMarker)
+    for indexCol, eachCol in enumerate(pointValuesColumn):
+        pointValuesColumn[indexCol][1] = [eachCol[1][1],eachCol[1][0]]
+    pointValues = pointValuesRow + pointValuesColumn
     #analyzeBestPlay returns playAnalysis that is a list of [playValue,emptyCell]
     playToMake = [-1,[-1,-1]]
     for pointValue in pointValues:
         if pointValue[0] > playToMake[0]:
             playToMake = pointValue
-    print(playToMake)
-    #print(playToMake)
-    print(playToMake[0])
     playRow = playToMake[1][0]
-    print(playToMake[1][1])
     playCol = playToMake[1][1]
     positions[playRow][playCol] = computerMarker
     return positions                             
