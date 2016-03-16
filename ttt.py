@@ -18,7 +18,7 @@ def easyAI(positions, spacesLeft, playerMarker = "o"):
 
 
 def intro():
-    print("The positions are shown below as p1 to p9.")
+    print("The positions are shown below as 1 to 9.")
     print("When it's you're turn, pick a position and")
     print("type it in when prompted.")
     print(   "1|2|3\n" +
